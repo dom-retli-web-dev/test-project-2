@@ -1,0 +1,35 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import Reveal from "@components/reveal.astro";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from '~/theme.config';
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+---
+
+<Layout title={t('pages.menu.title')} description={t('pages.menu.description')}>
+  <Headline text={t('pages.menu.title')} class="pb-10" />
+
+  <div class="container mx-auto pb-20">
+    <Reveal from="up" class="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+      <p class="max-w-2xl text-stone-600 dark:text-stone-300">
+        {t('pages.menu.intro')}
+      </p>
+
+      <div class="mt-4 w-full max-w-md">
+        <img src="/menu/weekly-preview.jpg" alt="This week's menu preview" class="w-full rounded-2xl shadow-lg" width="600" height="776" loading="eager" decoding="async" />
+      </div>
+
+      <a href="/menu/weekly-menu.pdf" class="btn-primary group mt-4 inline-flex items-center gap-2" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        {t('pages.menu.cta')}
+      </a>
+
+      <p class="mt-2 text-sm text-stone-500">
+        {t('pages.menu.note')}
+      </p>
+    </Reveal>
+  </div>
+</Layout>

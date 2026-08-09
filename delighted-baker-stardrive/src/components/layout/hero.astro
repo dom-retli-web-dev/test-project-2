@@ -1,0 +1,114 @@
+---
+import { Icon } from "astro-icon/components";
+import HeroChip from "@components/promo/hero-chip.astro";
+import References from "@components/layout/references.astro";
+import { themeConfig } from '~/theme.config';
+import { useTranslations, getLocaleUrl } from "@utils/i18n";
+
+interface Props {
+  locale: string;
+}
+
+const { locale } = Astro.props as Props;
+const t = useTranslations(locale);
+---
+
+<div role="banner" class="hero relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden px-6 pt-48 pb-24">
+  <div class="hero-bg pointer-events-none">
+    <div class="glow"></div>
+  </div>
+
+  <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 text-center">
+    {themeConfig.promotions?.heroChip && <HeroChip {locale} />}
+
+    <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
+    <p class="hero-subline">{t('pages.home.hero-sub-slogan')}</p>
+
+    <div class="flex flex-col gap-10">
+      <div class="mt-1 flex flex-wrap justify-center gap-4">
+        <a href={getLocaleUrl('docs', locale)} class="btn-primary">{t('labels.get-started')}</a>
+        <a href={getLocaleUrl('features', locale)} class="hero-btn-secondary group inline-flex cursor-pointer items-center gap-2 rounded border-2 border-primary/30 bg-white/60 px-4 py-2 pr-3 text-base font-semibold whitespace-nowrap text-primary-dark no-underline transition-all select-none hover:border-primary hover:bg-white hover:text-primary-darker">
+          <span>{t('labels.explore-features')}</span>
+          <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<References {locale} />
+
+<style>
+  @reference "../../styles/tailwind.config.css";
+
+  .hero {
+    background: linear-gradient(160deg, #f5efe6 0%, #e8dccc 40%, #d4c5b2 100%);
+  }
+
+  .hero-bg {
+    @apply absolute inset-0 overflow-hidden;
+  }
+
+  .glow {
+    @apply absolute inset-0;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 35%, rgba(180, 131, 90, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 70% 65%, rgba(92, 58, 42, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 50% at 50% 20%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+    animation: breathe 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes breathe {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+
+  .hero-title {
+    @apply m-0 leading-[1.08] font-bold tracking-[-0.025em];
+    font-size: clamp(2.4rem, 6vw, 4.8rem);
+    color: #5c3a2a;
+    text-shadow: 0 2px 40px rgba(180, 131, 90, 0.15);
+  }
+
+  .hero-subline {
+    @apply m-0 max-w-[38rem] leading-[1.65];
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: #7a5c4a;
+  }
+
+  .hero-btn-secondary {
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glow { animation: none; }
+  }
+</style>
+
+<script>
+  import { get } from '@utils/localStorage';
+
+  function setupPromoVideo() {
+    const triggers = document.querySelectorAll<HTMLElement>('.promo-video__trigger');
+    triggers.forEach((trigger) => {
+      // Avoid double-binding when astro:page-load fires on the same DOM
+      if (trigger.dataset.promoVideoBound === '1') return;
+      trigger.dataset.promoVideoBound = '1';
+      trigger.addEventListener('click', () => {
+        const videoId = trigger.dataset.videoId;
+        const host = trigger.dataset.videoHost || 'https://www.youtube-nocookie.com';
+        if (!videoId) return;
+        const frame = trigger.parentElement?.querySelector<HTMLElement>('.promo-video__frame');
+        if (!frame) return;
+        const ccLang = get('locale') || 'en';
+        const src = `${host}/embed/${videoId}?autoplay=1&controls=0&rel=0&iv_load_policy=3&cc_load_policy=3&cc_lang_pref=${encodeURIComponent(ccLang)}&playsinline=1&enablejsapi=1`;
+        frame.innerHTML = `<iframe class="w-full h-full" src="${src}" title="Discover the Astro Stardrive boilerplate, build today, and ship faster" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        frame.classList.remove('hidden');
+        trigger.classList.add('hidden');
+      });
+    });
+  }
+
+  setupPromoVideo();
+  document.addEventListener('astro:page-load', setupPromoVideo);
+</script>

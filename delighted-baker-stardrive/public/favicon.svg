@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    @media (prefers-color-scheme: dark) { .fill-primary { fill: #d4a574; } }
+  </style>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d4a574"/>
+      <stop offset="100%" stop-color="#8b5e3c"/>
+    </linearGradient>
+  </defs>
+  <path class="fill-primary" fill="url(#g)" d="M256 96c-72 0-130 40-160 96-10 19-16 41-16 64 0 18 4 35 12 50 8 15 19 28 33 38 14 10 30 18 47 22 6 2 13 3 20 4v62c0 12 10 22 22 22h84c12 0 22-10 22-22v-62c7-1 14-2 20-4 17-4 33-12 47-22 14-10 25-23 33-38 8-15 12-32 12-50 0-23-6-45-16-64-30-56-88-96-160-96z"/>
+  <path class="fill-primary" fill="#fff" opacity="0.08" d="M192 160c-50 32-80 88-80 144 0 36 16 68 42 90 26 22 60 34 96 34 2 0 4 0 6 0V192c0-18 14-32 32-32z" transform="translate(0 10)"/>
+</svg>
