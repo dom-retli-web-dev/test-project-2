@@ -1,9 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import HeroChip from "@components/promo/hero-chip.astro";
 import References from "@components/layout/references.astro";
 import { themeConfig } from '~/theme.config';
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
+
+import heroSourdough from "@images/bread/hero-sourdough.jpg";
 
 interface Props {
   locale: string;
@@ -13,25 +16,38 @@ const { locale } = Astro.props as Props;
 const t = useTranslations(locale);
 ---
 
-<div role="banner" class="hero relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden px-6 pt-48 pb-24">
+<div role="banner" class="hero relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden px-6 pt-40 pb-24">
   <div class="hero-bg pointer-events-none">
     <div class="glow"></div>
   </div>
 
-  <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 text-center">
-    {themeConfig.promotions?.heroChip && <HeroChip {locale} />}
+  <div class="relative z-10 flex w-full max-w-6xl flex-col gap-12 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14">
+    <div class="flex flex-col items-center gap-6 text-center lg:items-start lg:text-left">
+      {themeConfig.promotions?.heroChip && <HeroChip {locale} />}
 
-    <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
-    <p class="hero-subline">{t('pages.home.hero-sub-slogan')}</p>
+      <h1 class="hero-title">{t('pages.home.hero-title')}</h1>
+      <p class="hero-subline">{t('pages.home.hero-sub-slogan')}</p>
 
-    <div class="flex flex-col gap-10">
-      <div class="mt-1 flex flex-wrap justify-center gap-4">
-        <a href={getLocaleUrl('docs', locale)} class="btn-primary">{t('labels.get-started')}</a>
-        <a href={getLocaleUrl('features', locale)} class="hero-btn-secondary group inline-flex cursor-pointer items-center gap-2 rounded border-2 border-primary/30 bg-white/60 px-4 py-2 pr-3 text-base font-semibold whitespace-nowrap text-primary-dark no-underline transition-all select-none hover:border-primary hover:bg-white hover:text-primary-darker">
-          <span>{t('labels.explore-features')}</span>
-          <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
-        </a>
+      <div class="flex flex-col gap-10">
+        <div class="mt-1 flex flex-wrap justify-center gap-4 lg:justify-start">
+          <a href={getLocaleUrl('docs', locale)} class="btn-primary">{t('labels.get-started')}</a>
+          <a href={getLocaleUrl('features', locale)} class="hero-btn-secondary group inline-flex cursor-pointer items-center gap-2 rounded border-2 border-primary/30 bg-white/60 px-4 py-2 pr-3 text-base font-semibold whitespace-nowrap text-primary-dark no-underline transition-all select-none hover:border-primary hover:bg-white hover:text-primary-darker">
+            <span>{t('labels.explore-features')}</span>
+            <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
+          </a>
+        </div>
       </div>
+    </div>
+
+    <div class="mx-auto w-full max-w-md lg:max-w-none">
+      <Image
+        src={heroSourdough}
+        alt="Classic sourdough boule on a wooden board with a golden, flour-dusted crust"
+        format="webp"
+        loading="eager"
+        decoding="async"
+        class="w-full rounded-3xl border-4 border-white/70 shadow-2xl"
+      />
     </div>
   </div>
 </div>

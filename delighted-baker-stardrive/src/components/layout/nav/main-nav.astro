@@ -1,8 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import { useTranslations, getLocaleUrl } from "@utils/i18n";
-import NavAd from "@components/promo/nav-ad.astro";
-import { themeConfig } from '~/theme.config';
 import type { NavItem } from "~/types/nav";
 
 interface Props {
@@ -14,19 +12,9 @@ const { locale, tabIndex = 0 } = Astro.props as Props;
 const t = useTranslations(locale);
 
 const navLinks: NavItem[] = [
-  { href: getLocaleUrl('features', locale), label: t('nav.features') },
-  { href: getLocaleUrl('pricing', locale), label: t('nav.pricing') },
+  { href: getLocaleUrl('/', locale), label: t('nav.home') },
   { href: getLocaleUrl('menu', locale), label: t('nav.menu') },
-  {
-    isParent: true,
-    label: t('nav.docs'),
-    children: [
-      { href: getLocaleUrl('docs', locale), label: t('nav.docs-installation'), icon: 'heroicons:sparkles' },
-      { href: getLocaleUrl('docs/configuration', locale), label: t('nav.docs-configuration'), icon: 'heroicons:wrench-screwdriver' },
-      { href: getLocaleUrl('docs/guide', locale), label: t('nav.docs-guide'), subline: t('nav.docs-guide-explainer'), icon: 'heroicons:book-open' },
-    ],
-  },
-  { href: getLocaleUrl('examples', locale), label: t('nav.examples') },
+  { href: getLocaleUrl('about', locale), label: t('nav.about') },
 ];
 ---
 
@@ -55,7 +43,6 @@ const navLinks: NavItem[] = [
                 </li>
               ))}
             </ul>
-            {themeConfig.promotions?.navAd && <NavAd {locale} />}
           </div>
         </div>
       ) : (
@@ -110,99 +97,6 @@ const navLinks: NavItem[] = [
 </div>
 
 <script>
-  // Desktop dropdowns
-
-  let dropdownController = new AbortController();
-
-  function setupDropdowns() {
-    dropdownController.abort();
-    dropdownController = new AbortController();
-    const { signal } = dropdownController;
-
-    let activePanel: HTMLElement | null = null;
-    let activeTrigger: HTMLElement | null = null;
-
-    const getMenuItems = (panel: HTMLElement) => Array.from(panel.querySelectorAll<HTMLElement>('[role="menuitem"]'));
-
-    const closeDropdown = () => {
-      if (!activePanel || !activeTrigger) return;
-      activePanel.classList.remove('opacity-100', 'scale-100');
-      activePanel.hidden = true;
-      activeTrigger.setAttribute('aria-expanded', 'false');
-      activeTrigger.querySelector('svg')?.classList.remove('rotate-180');
-      activeTrigger.focus();
-      activePanel = null;
-      activeTrigger = null;
-    };
-
-    const openDropdown = (panel: HTMLElement, trigger: HTMLElement, focusFirst = false) => {
-      if (activePanel) closeDropdown();
-      activePanel = panel;
-      activeTrigger = trigger;
-      panel.hidden = false;
-      // Trigger the fade + pop on the next frame so the transition runs
-      requestAnimationFrame(() => panel.classList.add('opacity-100', 'scale-100'));
-      trigger.setAttribute('aria-expanded', 'true');
-      trigger.querySelector('svg')?.classList.add('rotate-180');
-      if (focusFirst) getMenuItems(panel)[0]?.focus();
-    };
-
-    document.querySelectorAll<HTMLElement>('[data-dropdown]').forEach((dropdown) => {
-      const trigger = dropdown.querySelector<HTMLElement>('[data-dropdown-trigger]');
-      const panel = dropdown.querySelector<HTMLElement>('[data-dropdown-panel]');
-      if (!trigger || !panel) return;
-
-      trigger.addEventListener(
-        'click',
-        (e) => {
-          // e.detail === 0 means keyboard activation (Enter/Space); focus first item only then
-          if (panel.hidden) {
-            openDropdown(panel, trigger, e.detail === 0);
-          } else {
-            closeDropdown();
-          }
-        },
-        { signal },
-      );
-    });
-
-    // Keyboard navigation - focus trap while a dropdown is open
-    document.addEventListener(
-      'keydown',
-      (e) => {
-        if (!activePanel) return;
-        const items = getMenuItems(activePanel);
-        const idx = items.indexOf(document.activeElement as HTMLElement);
-
-        if (e.key === 'Escape') {
-          closeDropdown();
-          e.preventDefault();
-        } else if (e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey)) {
-          e.preventDefault();
-          items[(idx + 1) % items.length]?.focus();
-        } else if (e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey)) {
-          e.preventDefault();
-          items.at(idx <= 0 ? -1 : idx - 1)?.focus();
-        }
-      },
-      { signal },
-    );
-
-    // Close when clicking outside
-    document.addEventListener(
-      'click',
-      (e) => {
-        if (activePanel && !(e.target as Element | null)?.closest('[data-dropdown]')) {
-          closeDropdown();
-        }
-      },
-      { signal },
-    );
-  }
-
-  setupDropdowns();
-  document.addEventListener('astro:after-swap', setupDropdowns);
-
   // Mobile nav
 
   let mobileController = new AbortController();
