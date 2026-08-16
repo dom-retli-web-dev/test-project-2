@@ -1,0 +1,117 @@
+---
+import Layout from "@layouts/default.astro";
+import Headline from "@components/headline.astro";
+import Reveal from "@components/reveal.astro";
+import { Icon } from "astro-icon/components";
+import { useTranslations } from "@utils/i18n";
+import { themeConfig } from '~/theme.config';
+
+const locale = themeConfig.i18n.defaultLocale;
+const t = useTranslations(locale);
+---
+
+<Layout title={t('pages.join.title')} description={t('pages.join.description')}>
+  <Headline text={t('pages.join.title')} class="pb-10" />
+
+  <div class="container mx-auto pb-20">
+    <div class="mx-auto grid w-full max-w-4xl items-start gap-8 md:grid-cols-[1fr_minmax(0,1.05fr)]">
+      <Reveal from="left">
+        <div class="flex flex-col gap-4 pt-2">
+          <p class="text-lg leading-relaxed text-stone-600 dark:text-stone-300">
+            {t('pages.join.intro')}
+          </p>
+          <ul class="m-0 flex list-none flex-col gap-3 p-0 text-stone-600 dark:text-stone-300">
+            <li class="flex items-start gap-3">
+              <Icon name="heroicons:check-circle" class="text-primary dark:text-primary-light mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+              <span>{t('pages.join.bullet-menu')}</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="heroicons:check-circle" class="text-primary dark:text-primary-light mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+              <span>{t('pages.join.bullet-text')}</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <Icon name="heroicons:check-circle" class="text-primary dark:text-primary-light mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+              <span>{t('pages.join.bullet-private')}</span>
+            </li>
+          </ul>
+          <p class="text-sm text-stone-500">{t('pages.join.note')}</p>
+        </div>
+      </Reveal>
+
+      <Reveal from="right">
+        <form id="join-form" class="flex flex-col gap-5 rounded-2xl border border-stone-300 bg-white p-8 shadow-sm dark:border-stone-700 dark:bg-stone-900" aria-label={t('pages.join.form-label')} data-join-form>
+          <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" class="hidden" />
+
+          <div class="flex flex-col gap-2">
+            <label for="join-name" class="text-sm font-semibold">{t('pages.join.name-label')}</label>
+            <input id="join-name" name="name" type="text" required autocomplete="name" placeholder={t('pages.join.name-placeholder')} class="input-primary" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="join-phone" class="text-sm font-semibold">{t('pages.join.phone-label')}</label>
+            <input id="join-phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" placeholder={t('pages.join.phone-placeholder')} class="input-primary" />
+          </div>
+
+          <p id="join-error" class="hidden text-sm font-semibold text-red-600" role="alert" aria-live="assertive" data-join-error></p>
+          <p id="join-success" class="hidden text-sm font-semibold text-green-700" role="status" data-join-success></p>
+
+          <button id="join-submit" type="submit" class="btn-primary inline-flex w-full items-center justify-center gap-2">
+            <Icon name="heroicons:chat-bubble-left-right" id="join-icon-default" class="h-5 w-5" aria-hidden="true" />
+            <span>{t('pages.join.submit')}</span>
+          </button>
+        </form>
+      </Reveal>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function setupJoinForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-join-form]');
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const errorEl = form.querySelector<HTMLElement>('[data-join-error]');
+    const successEl = form.querySelector<HTMLElement>('[data-join-success]');
+
+    const show = (el: HTMLElement | null, message: string) => {
+      if (!el) return;
+      el.textContent = message;
+      el.classList.remove('hidden');
+    };
+    const hideAll = () => {
+      errorEl?.classList.add('hidden');
+      successEl?.classList.add('hidden');
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAll();
+
+      const button = form.querySelector<HTMLButtonElement>('#join-submit');
+      button?.setAttribute('aria-busy', 'true');
+      button?.setAttribute('disabled', 'disabled');
+
+      try {
+        const body = new FormData(form);
+        const response = await fetch('/api/join', { method: 'POST', body });
+        const data = (await response.json().catch(() => ({}))) as { ok?: boolean; message?: string };
+        if (response.ok && data.ok) {
+          show(successEl, data.message ?? 'Thanks! The baker will be in touch.');
+          form.querySelector<HTMLInputElement>('#join-name')!.value = '';
+          form.querySelector<HTMLInputElement>('#join-phone')!.value = '';
+        } else {
+          show(errorEl, 'Something went wrong. Please try again shortly.');
+        }
+      } catch {
+        show(errorEl, 'Something went wrong. Please try again shortly.');
+      } finally {
+        button?.removeAttribute('disabled');
+        button?.removeAttribute('aria-busy');
+      }
+    });
+  }
+
+  setupJoinForm();
+  document.addEventListener('astro:page-load', setupJoinForm);
+</script>

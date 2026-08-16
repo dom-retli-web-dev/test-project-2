@@ -9,6 +9,20 @@
   },
   "workers_dev": false,
   "preview_urls": false,
+  "kv_namespaces": [
+    // The BREAD_LIST KV namespace stores bread list signups (name + phone).
+    // Create it once with: npx wrangler kv namespace create BREAD_LIST
+    // then paste the returned id below (id = production, preview_id = dev).
+    {
+      "binding": "BREAD_LIST",
+      "id": "b204348fefa4498f92a522db83214962",
+      "preview_id": "1108df5e9cd64368ae09107dc269e03b",
+    },
+  ],
+  // BREAD_LIST_TOKEN protects the /bread-list page (compare via ?token=).
+  // It is NOT defined in `vars` here so it can't shadow the remote secret at deploy time.
+  // - Production: `npx wrangler secret put BREAD_LIST_TOKEN`
+  // - Local dev / preview: put it in `.dev.vars`
   "observability": {
     "enabled": false,
   },

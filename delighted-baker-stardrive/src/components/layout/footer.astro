@@ -6,7 +6,6 @@ import Logo from '@images/logo-footer.svg';
 import FooterNav from "@components/layout/nav/footer-nav.astro";
 import LegalNav from "@components/layout/nav/legal.astro";
 import LightModeSwitch from "@components/layout/light-mode-switch.astro";
-import NewsletterSignup from "@components/promo/newsletter-signup.astro";
 
 interface Props {
   locale: string;
@@ -54,8 +53,13 @@ const instagramUrl: string|undefined = 'https://www.instagram.com/thedelightedwi
         }
       </div>
     </div>
-    <div class="flex w-full flex-col md:w-fit">
-      {(themeConfig.promotions?.newsletterSignup === true || themeConfig.promotions?.newsletterSignup === 'footer') && <NewsletterSignup {locale} inFooter={true} />}
+    <div class="flex w-full flex-col gap-4 md:w-fit">
+      <h3 class="p-0 text-lg font-bold text-stone-50">{t('labels.subscribe')}</h3>
+      <p class="max-w-xs text-sm leading-relaxed text-stone-300">{t('global-promo.footer-text')}</p>
+      <a href={getLocaleUrl('join', locale)} class="btn-primary btn-primary-inFooter w-fit">
+        {t('labels.signup')}
+        <Icon name="heroicons:arrow-right" class="h-4 w-4" aria-hidden="true" />
+      </a>
     </div>
   </div>
   <div class="container mt-10 flex flex-col flex-wrap items-center justify-between gap-x-14 gap-y-6 border-t border-white/10 py-6 pt-7 sm:flex-row-reverse">

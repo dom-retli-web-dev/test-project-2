@@ -60,7 +60,7 @@ const { locale, button, tabIndex = 0, shrink = true, isHome, ctaButton, github, 
     <div class="flex items-center gap-5">
       {
         ctaButton && (
-          <a href={ctaButton.href} class="btn-primary hidden text-sm sm:block" tabindex={tabIndex}>
+          <a href={ctaButton.href} class="btn-primary btn-primary-small sm:px-4 sm:py-2" tabindex={tabIndex}>
             {ctaButton.text}
           </a>
         )

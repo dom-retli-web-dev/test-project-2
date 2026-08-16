@@ -77,8 +77,6 @@ const useCases: UseCase[] = [
   { slug: "usecase-events", icon: "heroicons:calendar-days" },
 ];
 
-const docsUrl = getLocaleUrl("docs", locale);
-const featuresUrl = getLocaleUrl("features", locale);
 ---
 
 <section class="home-content flex flex-col overflow-x-clip">
@@ -144,7 +142,9 @@ const featuresUrl = getLocaleUrl("features", locale);
               {t('home-content.menu-note')}
             </p>
             <a href="/menu/weekly-menu.pdf" class="btn-primary group inline-flex w-fit items-center gap-2" target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true"
+                ><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg
+              >
               {t('home-content.menu-cta')}
             </a>
           </div>
@@ -172,7 +172,7 @@ const featuresUrl = getLocaleUrl("features", locale);
         <ol class="m-0 grid list-none grid-cols-1 gap-8 p-0 md:grid-cols-4">
           <li class="m-0 flex flex-col items-center text-center">
             <Reveal from="up" class="flex flex-col items-center gap-4">
-              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-white shadow-lg shadow-primary/20">1</span>
+              <span class="bg-primary shadow-primary/20 flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold text-white shadow-lg">1</span>
               <div class="flex flex-col gap-1.5">
                 <h3 class="text-lg font-bold">{t('home-content.step-menu-title')}</h3>
                 <p class="max-w-56 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{t('home-content.step-menu-text')}</p>
@@ -181,16 +181,19 @@ const featuresUrl = getLocaleUrl("features", locale);
           </li>
           <li class="m-0 flex flex-col items-center text-center">
             <Reveal delay={70} from="up" class="flex flex-col items-center gap-4">
-              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-white shadow-lg shadow-primary/20">2</span>
+              <span class="bg-primary shadow-primary/20 flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold text-white shadow-lg">2</span>
               <div class="flex flex-col gap-1.5">
                 <h3 class="text-lg font-bold">{t('home-content.step-signup-title')}</h3>
                 <p class="max-w-56 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{t('home-content.step-signup-text')}</p>
+                <a href={getLocaleUrl('join', locale)} class="text-primary dark:text-primary-light text-sm font-semibold no-underline underline-offset-2 hover:underline">
+                  {t('labels.signup')}
+                </a>
               </div>
             </Reveal>
           </li>
           <li class="m-0 flex flex-col items-center text-center">
             <Reveal delay={140} from="up" class="flex flex-col items-center gap-4">
-              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-white shadow-lg shadow-primary/20">3</span>
+              <span class="bg-primary shadow-primary/20 flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold text-white shadow-lg">3</span>
               <div class="flex flex-col gap-1.5">
                 <h3 class="text-lg font-bold">{t('home-content.step-order-title')}</h3>
                 <p class="max-w-56 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{t('home-content.step-order-text')}</p>
@@ -199,7 +202,7 @@ const featuresUrl = getLocaleUrl("features", locale);
           </li>
           <li class="m-0 flex flex-col items-center text-center">
             <Reveal delay={210} from="up" class="flex flex-col items-center gap-4">
-              <span class="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-xl font-bold text-white shadow-lg shadow-primary/20">4</span>
+              <span class="bg-primary shadow-primary/20 flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold text-white shadow-lg">4</span>
               <div class="flex flex-col gap-1.5">
                 <h3 class="text-lg font-bold">{t('home-content.step-pickup-title')}</h3>
                 <p class="max-w-56 text-sm leading-relaxed text-stone-600 dark:text-stone-300">{t('home-content.step-pickup-text')}</p>
@@ -210,7 +213,6 @@ const featuresUrl = getLocaleUrl("features", locale);
       </section>
     </div>
   </div>
-
 
   <!-- ── Use cases ── -->
   <div class="graph-paper-bg-inner">
@@ -248,7 +250,6 @@ const featuresUrl = getLocaleUrl("features", locale);
       </section>
     </div>
   </div>
-
 
   <!-- ── Customer voices ── -->
   <div class="container mx-auto py-20">
@@ -297,12 +298,8 @@ const featuresUrl = getLocaleUrl("features", locale);
           {t('home-content.cta-sub')}
         </p>
         <div class="mt-2 flex flex-wrap items-center justify-center gap-4">
-          <a href={docsUrl} class="btn-primary group">
-            {t('home-content.cta-primary')}
-            <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" aria-hidden="true" />
-          </a>
-          <a href={featuresUrl} class="btn-subtle group rounded px-4 py-[0.43rem]">
-            <span>{t('home-content.cta-secondary')}</span>
+          <a href={getLocaleUrl('join', locale)} class="btn-primary group">
+            {t('labels.signup')}
             <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" aria-hidden="true" />
           </a>
         </div>

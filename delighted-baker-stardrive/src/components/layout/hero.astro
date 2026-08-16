@@ -30,9 +30,9 @@ const t = useTranslations(locale);
 
       <div class="flex flex-col gap-10">
         <div class="mt-1 flex flex-wrap justify-center gap-4 lg:justify-start">
-          <a href={getLocaleUrl('docs', locale)} class="btn-primary">{t('labels.get-started')}</a>
-          <a href={getLocaleUrl('features', locale)} class="hero-btn-secondary group inline-flex cursor-pointer items-center gap-2 rounded border-2 border-primary/30 bg-white/60 px-4 py-2 pr-3 text-base font-semibold whitespace-nowrap text-primary-dark no-underline transition-all select-none hover:border-primary hover:bg-white hover:text-primary-darker">
-            <span>{t('labels.explore-features')}</span>
+          <a href={getLocaleUrl('join', locale)} class="btn-primary">{t('labels.get-started')}</a>
+          <a href={getLocaleUrl('menu', locale)} class="hero-btn-secondary group border-primary/30 text-primary-dark hover:border-primary hover:text-primary-darker inline-flex cursor-pointer items-center gap-2 rounded border-2 bg-white/60 px-4 py-2 pr-3 text-base font-semibold whitespace-nowrap no-underline transition-all select-none hover:bg-white">
+            <span>{t('labels.view-menu')}</span>
             <Icon name="heroicons:arrow-right" class="mr-1 ml-0 h-4 w-4 transition-all duration-200 group-hover:mr-0 group-hover:ml-1" />
           </a>
         </div>
@@ -40,14 +40,7 @@ const t = useTranslations(locale);
     </div>
 
     <div class="mx-auto w-full max-w-md lg:max-w-none">
-      <Image
-        src={heroSourdough}
-        alt="Classic sourdough boule on a wooden board with a golden, flour-dusted crust"
-        format="webp"
-        loading="eager"
-        decoding="async"
-        class="w-full rounded-3xl border-4 border-white/70 shadow-2xl"
-      />
+      <Image src={heroSourdough} alt="Classic sourdough boule on a wooden board with a golden, flour-dusted crust" format="webp" loading="eager" decoding="async" class="w-full rounded-3xl border-4 border-white/70 shadow-2xl" />
     </div>
   </div>
 </div>
@@ -67,16 +60,17 @@ const t = useTranslations(locale);
 
   .glow {
     @apply absolute inset-0;
-    background:
-      radial-gradient(ellipse 60% 40% at 30% 35%, rgba(180, 131, 90, 0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 30% at 70% 65%, rgba(92, 58, 42, 0.08) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 50% at 50% 20%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+    background: radial-gradient(ellipse 60% 40% at 30% 35%, rgba(180, 131, 90, 0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 70% 65%, rgba(92, 58, 42, 0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 50% at 50% 20%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
     animation: breathe 12s ease-in-out infinite alternate;
   }
 
   @keyframes breathe {
-    0% { opacity: 0.7; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   .hero-title {
@@ -97,7 +91,9 @@ const t = useTranslations(locale);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .glow { animation: none; }
+    .glow {
+      animation: none;
+    }
   }
 </style>
 

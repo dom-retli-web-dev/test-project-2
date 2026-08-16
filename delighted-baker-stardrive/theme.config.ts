@@ -88,7 +88,7 @@ export const themeConfig: ThemeConfig = {
 
   // promotion settings
   promotions: {
-    newsletterSignup: 'footer',
+    newsletterSignup: false,
     footerBanner: false,
     navAd: false,
     topBanner: false,

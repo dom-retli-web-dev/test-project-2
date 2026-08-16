@@ -111,9 +111,18 @@ export default defineConfig({
         enforce: 'post',
         apply: 'build',
         renderChunk(code) {
+          // Skip rolldown's shared runtime chunk: transforming it empties the chunk and drops the
+          // exports ("n", "r", "t", ...) that every other chunk imports, breaking Node-based prerendering.
+          if (code.includes('\\0rolldown/runtime.js')) return null;
           if (!code.includes('createRequire(import.meta.url)')) return null;
+          // Only neutralize `createRequire` in the workerd runtime (on-demand SSR), where
+          // `import.meta.url` is undefined. During Node-based prerendering a real require is
+          // needed (e.g. `util-deprecate` -> `require("util")`), so fall back to the real
+          // `node:module` createRequire there via `process.getBuiltinModule` (Node >= 22.3).
+          const nodeRequire = `(process.getBuiltinModule ?? (() => null))('module')?.createRequire(import.meta.url)`;
+          const workerdStub = `() => ({ resolve: () => { throw new Error("no require"); }, })`;
           return {
-            code: code.replaceAll('createRequire(import.meta.url)', '() => ({ resolve: () => { throw new Error("no require"); }, })'),
+            code: code.replaceAll('createRequire(import.meta.url)', `${nodeRequire} ?? ${workerdStub}`),
             map: null,
           };
         },
@@ -183,7 +192,12 @@ export default defineConfig({
   ],
 
   adapter: cloudflare({
-    imageService: 'cloudflare', // mind to activate Media > Images > Transformations in the Cloudflare dashboard for your Zone/Worker!
+    // Build-time (sharp) image optimization for prerendered routes. Emits plain static
+    // image files that work in `wrangler dev` and in production without relying on
+    // Cloudflare's Images/Transformations feature. The site's only on-demand routes
+    // (/api/join, /bread-list) do not render images, so the `compile` on-demand
+    // limitation does not apply here.
+    imageService: 'compile',
     prerenderEnvironment: 'node', // only applies to prerendering at build time. On-demand SSR always uses the Cloudflare workerd runtime. Node is currently required here because some render-time dependencies call Node-only path/url APIs that are not available in workerd's isolated runtime.
   }),
 });
