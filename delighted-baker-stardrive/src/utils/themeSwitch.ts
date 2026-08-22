@@ -25,21 +25,22 @@ const applyTheme = (theme: UserTheme) => {
 
 /**
  * Inline script run synchronously in <head> before first paint to prevent theme flash.
- * Must be self-contained (no imports) - injected via `set:html` in base.astro.
- * The Expressive Code theme names are interpolated at build time from `theme.config.ts`.
+ * Dark mode is disabled - the light Expressive Code theme is always applied and the
+ * `dark` class is never set. Must be self-contained (no imports) - injected via
+ * `set:html` in base.astro. The theme name is interpolated at build time from
+ * `theme.config.ts`.
  */
-export const THEME_INIT_SCRIPT = `(function(){var t=localStorage.getItem('user-theme');` + `var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);` + `if(d){document.documentElement.classList.add('dark')}` + `document.documentElement.setAttribute('data-theme',d?'${EC_THEME_DARK}':'${EC_THEME_LIGHT}')})();`;
+export const THEME_INIT_SCRIPT = `(function(){document.documentElement.setAttribute('data-theme','${EC_THEME_LIGHT}')})();`;
 
 function getSystemPreference(): UserTheme {
-  // check for the system and fall back to light
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return prefersDark ? 'dark' : 'light';
+  // dark mode is disabled - ignore the system preference and fall back to light
+  return 'light';
 }
 
 export const getUserTheme = (): UserTheme => {
-  // try to get the theme from local storage
+  // try to get the theme from local storage, but never honor a stored dark theme
   let theme = get('user-theme') as UserTheme;
-  if (!theme) {
+  if (theme !== 'light') {
     theme = getSystemPreference();
     void set('user-theme', theme);
   }
