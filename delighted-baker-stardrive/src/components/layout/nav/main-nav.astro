@@ -15,14 +15,17 @@ const navLinks: NavItem[] = [
   { href: getLocaleUrl('/', locale), label: t('nav.home') },
   { href: getLocaleUrl('menu', locale), label: t('nav.menu') },
   { href: getLocaleUrl('about', locale), label: t('nav.about') },
-  { href: getLocaleUrl('join', locale), label: t('labels.signup') },
+  // duplicates the always-visible CTA button on desktop, so only shown in the mobile menu
+  { href: getLocaleUrl('join', locale), label: t('labels.signup'), hideDesktop: true },
 ];
+
+const desktopNavLinks = navLinks.filter((item) => !('hideDesktop' in item && item.hideDesktop));
 ---
 
 <!-- Desktop nav -->
 <nav role="navigation" aria-label="Main" class="hidden items-center gap-6 text-sm lg:flex">
   {
-    navLinks.map((item, i) =>
+    desktopNavLinks.map((item, i) =>
       item.isParent ? (
         <div class="relative" data-dropdown>
           <button class="hover:text-primary focus-visible:text-primary outline-primary flex cursor-pointer items-center gap-1 rounded-lg font-semibold outline-offset-8 focus-visible:outline-2" aria-haspopup="true" aria-expanded="false" aria-controls={`nav-dropdown-${i}`} tabindex={tabIndex} data-dropdown-trigger>

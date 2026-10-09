@@ -16,6 +16,8 @@ interface NavLinkItem {
   href: string;
   label: string;
   isParent?: false;
+  /* Hide this link in the desktop navigation (e.g. when it duplicates a header CTA button) */
+  hideDesktop?: boolean;
 }
 
 export type NavItem = NavLinkItem | NavParentItem;
